@@ -24,7 +24,6 @@
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
-    "@tailwindcss/oxide-win32-x64-msvc": "4.2.1",
     "@tailwindcss/postcss": "4.2.1",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -33,5 +32,8 @@
     "eslint-config-next": "16.1.6",
     "tailwindcss": "4.2.1",
     "typescript": "^5"
+  },
+  "optionalDependencies": {
+    "@tailwindcss/oxide-win32-x64-msvc": "4.2.1"
   }
 }
