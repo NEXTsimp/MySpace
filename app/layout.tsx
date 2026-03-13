@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import { ThemeProvider } from "./components/ThemeProvider";
+import { NetEasePlayer } from "./components/music/NetEasePlayer";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -65,6 +66,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
+          <NetEasePlayer />
         </ThemeProvider>
         <Analytics />
       </body>

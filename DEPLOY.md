@@ -104,7 +104,12 @@ git push origin main
 
 ## 常见问题
 
-- **构建失败**：在 Vercel 的 **Deployments** 里点进失败的那次，看 **Building** 日志里的报错（常见是依赖或 Node 版本问题）。
+- **Deployment failed**：
+  1. 在 Vercel 的 **Deployments** 里点进失败的那次，展开 **Build Logs**，拉到最下面看**具体报错行**（你贴的日志若在 “Installing dependencies...” 就断掉，需要看后面的报错）。
+  2. 确认部署的是**最新提交**：日志里会写 `Commit: xxx`，若还是旧 commit（如 f3affe4），到 GitHub 确认已 push 最新代码，再在 Vercel 点 **Redeploy**。
+  3. 在 Vercel 项目 **Settings → General** 里可勾选 **Override** 将 Node.js 版本设为 **18.x** 或 **20.x**。
+  4. 若报错与依赖有关，可在 **Settings → General** 里启用 **Clear build cache** 后重新部署。
+- **构建失败（本地可复现）**：本地执行 `npm run build` 看报错，常见是依赖或 Node 版本（本项目需 Node ≥18）。
 - **RSS 里链接不对**：检查 `NEXT_PUBLIC_SITE_URL` 是否设为当前实际访问的完整地址（含 `https://`），并已 Redeploy。
 - **样式或功能与本地不一致**：确认分支、环境变量与本地一致，必要时清缓存再 Redeploy。
 

@@ -46,3 +46,102 @@ body {
   max-width: 100%;
   height: auto;
 }
+
+/* =========================================
+   APlayer 终极美化：偏右下角 + 完美向右展开
+   ========================================= */
+
+/* 挂载点与播放器同位置、零尺寸，不占右下角；内部 .aplayer 为 fixed 仍正常显示 */
+.aplayer-float {
+  position: fixed !important;
+  bottom: 20px !important;
+  left: calc(100vw - 400px) !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  pointer-events: none !important;
+}
+.aplayer-float .aplayer {
+  pointer-events: auto !important;
+}
+
+/* 展开时右侧占位收掉（miniswitch 已 display:none，再确保不占宽） */
+.aplayer.aplayer-fixed .aplayer-miniswitch {
+  width: 0 !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+
+/* 1. 整体位置控制 */
+.aplayer.aplayer-fixed {
+  /* 魔法就在这里：不用 right，而是用 calc 计算 left。
+     假设展开宽320px，右侧工具栏占位及间距约80px，总共需要400px空间。
+     这样封面图的起点就被牢牢钉死在这个位置，展开时只会往右侧拉伸！ */
+  left: calc(100vw - 400px) !important;
+  right: auto !important;
+  bottom: 20px !important;
+  max-width: 320px !important;
+  z-index: 9999 !important;
+
+  /* 毛玻璃卡片质感 */
+  border-radius: 12px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1) !important;
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  transition: width 0.3s ease, background 0.3s ease !important;
+}
+
+/* 2. 迷你模式（默认折叠状态） */
+.aplayer.aplayer-fixed.aplayer-narrow {
+  width: 66px !important; /* 强制收缩宽度，只保留封面的宽度 */
+  background: transparent !important; /* 折叠时去掉毛玻璃背景 */
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+  background: transparent !important;
+}
+
+/* 修复封面图样式 */
+.aplayer.aplayer-fixed .aplayer-pic {
+  border-radius: 12px !important; /* 展开时的圆角 */
+  transition: all 0.3s ease;
+}
+
+/* 折叠时封面变圆 */
+.aplayer.aplayer-fixed.aplayer-narrow .aplayer-pic {
+  border-radius: 50% !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* 隐藏烦人的侧边拉出开关 */
+.aplayer.aplayer-fixed .aplayer-miniswitch {
+  display: none !important;
+}
+
+/* 深色模式适配 */
+.dark .aplayer.aplayer-fixed {
+  background: rgba(30, 30, 30, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+.dark .aplayer .aplayer-info .aplayer-music .aplayer-title,
+.dark .aplayer .aplayer-info .aplayer-controller .aplayer-time {
+  color: #e5e7eb !important;
+}
+.dark .aplayer .aplayer-info .aplayer-music .aplayer-author {
+  color: #9ca3af !important;
+}
+
+/* 移动端适配：屏幕太小没法向右展开，自动回到左下角 */
+@media (max-width: 768px) {
+  .aplayer.aplayer-fixed {
+    left: 20px !important;
+    bottom: 20px !important;
+    max-width: calc(100vw - 40px) !important;
+  }
+}
