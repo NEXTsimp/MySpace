@@ -90,7 +90,69 @@ git push origin main
 
 ---
 
-## 五、之后更新博客
+## 五、国内直连（可选）
+
+当前站点部署在 Vercel，服务器在海外。在国内部分网络下，`*.vercel.app` 可能被限速或需代理才能访问（如手机报 `ERR_CONNECTION_RESET`）。若希望**国内不挂代理也能稳定打开**，可考虑以下方式。
+
+### 方案 A：备案 + 国内云（真正国内直连）
+
+- 购买**国内服务器或静态托管**（如阿里云 OSS + CDN、腾讯云 Web 托管、华为云等）。
+- 对域名做 **ICP 备案**（用国内服务必须备案）。
+- 将本项目 `npm run build` 后的产物（或对接 CI）部署到国内云，域名解析到国内节点。
+- 这样国内访问走国内网络，无需代理，速度和稳定性最好。
+
+### 方案 B（推荐）：Cloudflare CDN + 自定义域名
+
+**架构**：用户 → Cloudflare CDN → Vercel → 你的 Next.js 博客  
+
+**优点**：全球 CDN、国内访问通常比直连 vercel.app 更稳定、**无需备案**、免费。很多技术博客采用此方案。
+
+**步骤**：
+
+1. **购买域名**  
+   Namecheap、阿里云等，例如 `liangtong.dev`、`liangtong.site`，一年几十元。
+
+2. **域名接入 Cloudflare**  
+   - 打开 [dash.cloudflare.com](https://dash.cloudflare.com)，添加站点（你的域名）。  
+   - Cloudflare 会给出两个 NS，例如 `xxx.ns.cloudflare.com`。  
+   - 到域名注册商处把域名的 **Nameserver** 改为这两个，等待 5～10 分钟生效。
+
+3. **Cloudflare DNS 指向 Vercel**  
+   在 Cloudflare 的 **DNS** 里添加：  
+   - **Type**：CNAME  
+   - **Name**：`blog`（或 `@` 若要用根域名）  
+   - **Target**：`你的项目.vercel.app`（如 `my-space-lovat.vercel.app`）  
+   - 保存。
+
+4. **Vercel 添加该域名**  
+   - Vercel 项目 → **Settings → Domains → Add**。  
+   - 填写：`blog.你的域名.com`（与上一步 Name 对应）。  
+   - 按提示在 DNS 里添加 CNAME（若已按上一步在 Cloudflare 配好，通常会自动验证通过）。
+
+5. **开启 Cloudflare 代理（橙色云朵）**  
+   - 回到 Cloudflare **DNS**，找到刚才的 CNAME 记录。  
+   - 把该记录右侧的 **代理状态** 点成 **已代理**（橙色云朵 ☁️），这样流量会经 Cloudflare CDN 再转发到 Vercel。
+
+6. **可选：加速与压缩**  
+   - **Speed → Optimization → Auto Minify**：勾选 HTML、CSS、JavaScript。  
+   - **Speed → Optimization → Brotli**：开启 Brotli 压缩。
+
+7. **更新环境变量**  
+   - 在 Vercel **Settings → Environment Variables** 中，将 `NEXT_PUBLIC_SITE_URL` 改为 `https://blog.你的域名.com`，然后 **Redeploy** 一次。
+
+**访问**：使用 `https://blog.你的域名.com`。国内访问通常会比直接打开 `xxx.vercel.app` 更稳定，具体效果因运营商而异。
+
+### 方案 C：双线部署（海外 Vercel + 国内镜像）
+
+- 海外继续用 Vercel（国外访问快）。
+- 国内单独部署一份：备案后把构建产物部署到阿里云 / 腾讯云等，或使用支持国内加速的静态托管。
+- 域名解析可做「智能解析」：国内 IP 走国内服务器，海外 IP 走 Vercel。
+
+**小结**：要稳定国内直连，通常需要**备案 + 国内机房/CDN**；仅用 Vercel 且不备案时，国内访问可能仍需代理或受网络环境影响。
+
+---
+
+## 六、之后更新博客
 
 每次把新文章或改动用 Git 推送到同一分支（如 `main`），Vercel 会自动重新构建并发布，无需手动再点部署。
 
@@ -112,5 +174,6 @@ git push origin main
 - **构建失败（本地可复现）**：本地执行 `npm run build` 看报错，常见是依赖或 Node 版本（本项目需 Node ≥18）。
 - **RSS 里链接不对**：检查 `NEXT_PUBLIC_SITE_URL` 是否设为当前实际访问的完整地址（含 `https://`），并已 Redeploy。
 - **样式或功能与本地不一致**：确认分支、环境变量与本地一致，必要时清缓存再 Redeploy。
+- **国内无法直连 / 必须开代理**：Vercel 在海外，国内部分网络会限速或重置连接。若需国内直连，请参考上文 **五、国内直连**（备案 + 国内云，或自定义域名/双线等方案）。
 
 完成上述步骤后，博客就可以在公网访问了；之后有需要再逐步加功能即可。

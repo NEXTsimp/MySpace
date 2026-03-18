@@ -52,7 +52,7 @@ export interface NetEasePlayerProps {
  * 仅客户端渲染，避免 SSR 与 meting-js 自定义元素冲突
  * 脚本加载顺序：APlayer → MetingJS（通过 Next.js Script 的 onLoad 串行加载）
  */
-export function NetEasePlayer({ playlistId = "17828413099" }: NetEasePlayerProps) {
+export function NetEasePlayer({ playlistId = "13180523247" }: NetEasePlayerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [aplayerReady, setAPlayerReady] = useState(false);
   const [metingReady, setMetingReady] = useState(false);
@@ -68,14 +68,14 @@ export function NetEasePlayer({ playlistId = "17828413099" }: NetEasePlayerProps
     };
   }, []);
 
-  // Meting 加载完成后在客户端挂载 <meting-js>，并轮询注入本地歌曲
+  // Meting 加载完成后在客户端挂载 <meting-js>
   useEffect(() => {
     if (!metingReady || !containerRef.current) return;
     // React Strict Mode 下会重复执行 effect，避免重复挂载
     if (containerRef.current.querySelector("meting-js")) return;
 
     containerRef.current.innerHTML = "";
-    const meting = document.createElement("meting-js") as MetingElement;
+    const meting = document.createElement("meting-js");
     meting.setAttribute("server", "netease");
     meting.setAttribute("type", "playlist");
     meting.setAttribute("id", playlistId);
@@ -87,27 +87,6 @@ export function NetEasePlayer({ playlistId = "17828413099" }: NetEasePlayerProps
     meting.setAttribute("order", "random");
     meting.setAttribute("volume", "0.7");
     containerRef.current.appendChild(meting);
-
-    // 轮询等待 meting.aplayer 初始化完成后，追加本地音乐到列表末尾
-    let pollId: ReturnType<typeof setInterval> | null = null;
-    if (localSongs.length > 0) {
-      pollId = setInterval(() => {
-        const ap = (meting as MetingElement).aplayer?.list;
-        if (ap) {
-          try {
-            ap.add(localSongs);
-          } catch {
-            localSongs.forEach((song) => ap.add(song));
-          }
-          if (pollId != null) clearInterval(pollId);
-          pollId = null;
-        }
-      }, 100);
-    }
-
-    return () => {
-      if (pollId != null) clearInterval(pollId);
-    };
   }, [metingReady, playlistId]);
 
   // 监听播放错误（VIP/版权/403）：自动跳过并播下一首
