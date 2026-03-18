@@ -35,6 +35,12 @@ export default function HomePage() {
           >
             探索工具箱
           </Link>
+          <Link
+            href="/gaming"
+            className="inline-flex min-h-[44px] items-center justify-center rounded-lg border border-zinc-300 dark:border-zinc-600 bg-transparent px-5 py-2.5 text-sm font-medium text-zinc-700 dark:text-zinc-300 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800"
+          >
+            游戏日常
+          </Link>
         </div>
       </section>
 
