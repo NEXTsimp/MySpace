@@ -19,6 +19,24 @@ const geistMono = Geist_Mono({
 
 const siteDescription = "热爱技术的开发者，喜欢折腾好玩的工具。技术栈实践与生活感悟。";
 
+function getMetadataBase(): URL | undefined {
+  const raw =
+    process.env.NEXT_PUBLIC_SITE_URL?.trim() ||
+    process.env.VERCEL_URL?.trim() ||
+    "";
+
+  if (!raw) return undefined;
+
+  // Vercel 的 VERCEL_URL 通常不带协议（例如 my-site.vercel.app）
+  const withProtocol = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
+
+  try {
+    return new URL(withProtocol);
+  } catch {
+    return undefined;
+  }
+}
+
 export const viewport = {
   width: "device-width",
   initialScale: 1,
@@ -26,9 +44,7 @@ export const viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: process.env.NEXT_PUBLIC_SITE_URL
-    ? new URL(process.env.NEXT_PUBLIC_SITE_URL)
-    : undefined,
+  metadataBase: getMetadataBase(),
   title: {
     default: "My Space",
     template: "%s | My Space",

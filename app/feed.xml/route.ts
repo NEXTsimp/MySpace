@@ -1,6 +1,15 @@
 import { getAllPosts } from "@/lib/posts";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com";
+function normalizeSiteUrl(raw: string | undefined): string {
+  const s = (raw ?? "").trim();
+  if (!s) return "";
+  return /^https?:\/\//i.test(s) ? s : `https://${s}`;
+}
+
+const SITE_URL =
+  normalizeSiteUrl(process.env.NEXT_PUBLIC_SITE_URL) ||
+  normalizeSiteUrl(process.env.VERCEL_URL) ||
+  "https://example.com";
 
 function escapeXml(s: string): string {
   return s
