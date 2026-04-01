@@ -8,6 +8,27 @@ export interface ToolItem {
 
 export const tools: ToolItem[] = [
   {
+    name: "图片处理工具箱",
+    link: "/tools/image",
+    description: "纯前端：转 WebP / 压缩 / 缩放 / 水印 / 批量打包下载。",
+    icon: "🖼️",
+    category: "自研工具",
+  },
+  {
+    name: "PDF 排版与处理工具箱",
+    link: "/tools/pdf",
+    description: "N-up 打印排版（2/4/6/9）+ 合并/拆分/旋转/图片转 PDF。",
+    icon: "📄",
+    category: "自研工具",
+  },
+  {
+    name: "万能美化二维码生成器",
+    link: "/tools/qr",
+    description: "支持渐变/圆角/Logo 嵌入，实时预览并导出 PNG/SVG。",
+    icon: "🔳",
+    category: "自研工具",
+  },
+  {
     name: "Cursor",
     link: "https://cursor.com",
     description: "AI 驱动的代码编辑器，提升开发效率。",

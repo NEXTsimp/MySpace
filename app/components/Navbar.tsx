@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { ThemeToggle } from "./ThemeToggle";
 
@@ -13,6 +13,7 @@ const navLinks = [
 
 export function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   // 防止菜单打开时背景滚动
@@ -38,12 +39,36 @@ export function Navbar() {
         className="mx-auto flex h-14 max-w-4xl items-center justify-between px-4 sm:px-6"
         aria-label="主导航"
       >
-        <Link
-          href="/"
-          className="font-mono text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
-        >
-          My Space
-        </Link>
+        <div className="flex items-center gap-2">
+          {pathname !== "/" && (
+            <button
+              type="button"
+              onClick={() => router.back()}
+              className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+              aria-label="返回上一页"
+              title="返回上一页"
+            >
+              <svg
+                className="h-5 w-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden
+              >
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+            </button>
+          )}
+          <Link
+            href="/"
+            className="font-mono text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
+          >
+            My Space
+          </Link>
+        </div>
 
         {/* 桌面端导航 */}
         <div className="hidden sm:flex sm:items-center sm:gap-4">

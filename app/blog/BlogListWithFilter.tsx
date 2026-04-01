@@ -9,10 +9,19 @@ const ALL = "全部";
 interface BlogListWithFilterProps {
   posts: Post[];
   categories: string[];
+  initialSelected?: string;
 }
 
-export function BlogListWithFilter({ posts, categories }: BlogListWithFilterProps) {
-  const [selected, setSelected] = useState<string>(ALL);
+export function BlogListWithFilter({
+  posts,
+  categories,
+  initialSelected,
+}: BlogListWithFilterProps) {
+  const initial =
+    initialSelected && initialSelected.trim().length > 0
+      ? initialSelected
+      : ALL;
+  const [selected, setSelected] = useState<string>(initial);
   const filtered =
     selected === ALL ? posts : posts.filter((p) => p.meta.category === selected);
 

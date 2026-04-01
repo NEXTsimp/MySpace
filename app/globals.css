@@ -48,6 +48,33 @@ body {
 }
 
 /* =========================================
+   PDF Tool print optimization
+   ========================================= */
+@media print {
+  .pdf-print-hidden {
+    display: none !important;
+  }
+
+  .pdf-tool-page {
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .pdf-print-preview {
+    border: none !important;
+    box-shadow: none !important;
+    background: #fff !important;
+    break-inside: avoid;
+  }
+
+  .pdf-print-preview img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+}
+
+/* =========================================
    APlayer 终极美化：偏右下角 + 完美向右展开
    ========================================= */
 
