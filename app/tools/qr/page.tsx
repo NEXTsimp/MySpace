@@ -791,7 +791,11 @@ export default function QrToolPage() {
                     <FieldRow label="Blend">
                       <select
                         value={bgBlendMode}
-                        onChange={(e) => setBgBlendMode(e.target.value as any)}
+                        onChange={(e) =>
+                          setBgBlendMode(
+                            e.target.value as typeof bgBlendMode
+                          )
+                        }
                         className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm"
                       >
                         <option value="multiply">Multiply</option>
@@ -890,7 +894,7 @@ export default function QrToolPage() {
                             className="rounded-2xl bg-white/95 p-4 shadow-sm transition-opacity duration-200"
                             style={{
                               opacity: isUpdating ? 0.5 : (safeExport ? 1 : qrOpacity),
-                              mixBlendMode: safeExport ? "normal" : (bgBlendMode as any),
+                              mixBlendMode: safeExport ? "normal" : bgBlendMode,
                             }}
                           >
                             {emptyHint ? (

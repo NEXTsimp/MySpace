@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
-import { Navbar } from "./components/Navbar";
+
 import { Footer } from "./components/Footer";
+import { Navbar } from "./components/Navbar";
 import { ThemeProvider } from "./components/ThemeProvider";
 import { NetEasePlayer } from "./components/music/NetEasePlayer";
+
 import "./globals.css";
 
 const geistSans = Geist({

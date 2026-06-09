@@ -6,6 +6,7 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import { getPostBySlug, getAllPosts } from "@/lib/posts";
 import { CodeCopyEnhancer } from "@/app/blog/CodeCopyEnhancer";
+import { Comments } from "@/app/components/Comments";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -119,6 +120,8 @@ export default async function BlogPostPage({ params }: PageProps) {
         </ReactMarkdown>
         <CodeCopyEnhancer />
       </div>
+
+      <Comments />
     </article>
   );
 }

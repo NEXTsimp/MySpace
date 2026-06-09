@@ -17,7 +17,7 @@ export const tools: ToolItem[] = [
   {
     name: "PDF 排版与处理工具箱",
     link: "/tools/pdf",
-    description: "N-up 打印排版（2/4/6/9）+ 合并/拆分/旋转/图片转 PDF。",
+    description: "N-up 打印排版（2/4/6/9）+ 合并/拆分/按章节 ZIP/旋转/图片转 PDF。",
     icon: "📄",
     category: "自研工具",
   },
