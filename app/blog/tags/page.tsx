@@ -8,9 +8,11 @@ export const metadata: Metadata = {
   description: "按类别（标签）浏览博客文章。",
 };
 
-export default function BlogTagsPage() {
-  const posts = getAllPosts();
-  const categories = getAllCategories();
+/** 每 5 分钟重新读取一次文章（含 Notion），新发布的文章无需重新部署 */
+export const revalidate = 300;
+
+export default async function BlogTagsPage() {
+  const [posts, categories] = await Promise.all([getAllPosts(), getAllCategories()]);
 
   const total = posts.length;
 

@@ -8,18 +8,24 @@ import { getPostBySlug, getAllPosts } from "@/lib/posts";
 import { CodeCopyEnhancer } from "@/app/blog/CodeCopyEnhancer";
 import { Comments } from "@/app/components/Comments";
 
+/** 每 5 分钟重新读取一次文章（含 Notion），新发布的文章无需重新部署 */
+export const revalidate = 300;
+
+/** 构建之后才在 Notion 发布的文章，也能直接访问 */
+export const dynamicParams = true;
+
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
-  const posts = getAllPosts();
+  const posts = await getAllPosts();
   return posts.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const post = await getPostBySlug(slug);
   if (!post)
     return { title: "文章未找到" };
 
@@ -53,7 +59,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const post = await getPostBySlug(slug);
   if (!post) notFound();
 
   return (

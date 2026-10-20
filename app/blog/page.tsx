@@ -8,17 +8,17 @@ export const metadata: Metadata = {
   description: "技术栈与生活感悟，按时间倒序。",
 };
 
-export default function BlogPage({
+export default async function BlogPage({
   searchParams,
 }: {
-  searchParams?: { category?: string };
+  searchParams: Promise<{ category?: string }>;
 }) {
-  const posts = getAllPosts();
-  const categories = getAllCategories();
-  const category =
-    typeof searchParams?.category === "string"
-      ? decodeURIComponent(searchParams.category)
-      : undefined;
+  const [{ category: rawCategory }, posts, categories] = await Promise.all([
+    searchParams,
+    getAllPosts(),
+    getAllCategories(),
+  ]);
+  const category = typeof rawCategory === "string" ? rawCategory : undefined;
   const initialSelected =
     category && category.trim().length > 0 ? category : undefined;
 

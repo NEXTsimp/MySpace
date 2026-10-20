@@ -21,6 +21,7 @@
     "jszip": "^3.10.1",
     "next": "16.1.6",
     "next-themes": "^0.4.6",
+    "notion-to-md": "^3.1.9",
     "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^5.5.207",
     "qr-code-styling": "^1.9.2",

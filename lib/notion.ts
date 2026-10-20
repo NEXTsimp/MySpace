@@ -18,7 +18,7 @@ if (!NOTION_API_KEY || !NOTION_DATABASE_ID) {
   );
 }
 
-const notion = NOTION_API_KEY ? new Client({ auth: NOTION_API_KEY }) : null;
+export const notion = NOTION_API_KEY ? new Client({ auth: NOTION_API_KEY }) : null;
 
 /** Notion API 返回的 file 项（external 或 file） */
 type NotionFileItem =

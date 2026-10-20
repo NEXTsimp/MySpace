@@ -9,8 +9,11 @@ export const metadata: Metadata = {
     "热爱技术的开发者，喜欢折腾好玩的工具。这里记录技术栈的实践与生活里的一点感悟。",
 };
 
-export default function HomePage() {
-  const latestPosts = getLatestPosts(3);
+/** 每 5 分钟重新读取一次文章（含 Notion），新发布的文章无需重新部署 */
+export const revalidate = 300;
+
+export default async function HomePage() {
+  const latestPosts = await getLatestPosts(3);
 
   return (
     <div className="space-y-16">

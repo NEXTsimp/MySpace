@@ -8,15 +8,16 @@ export const metadata: Metadata = {
   description: "使用关键词搜索博客文章。",
 };
 
-export default function BlogSearchPage({
+export default async function BlogSearchPage({
   searchParams,
 }: {
-  searchParams?: { q?: string };
+  searchParams: Promise<{ q?: string }>;
 }) {
-  const q =
-    typeof searchParams?.q === "string" ? searchParams.q.trim() : "";
+  const { q: rawQ } = await searchParams;
+  const q = typeof rawQ === "string" ? rawQ.trim() : "";
 
-  const posts = getAllPosts();
+  // Notion 文章在列表里没有正文，只搜标题和摘要（避免每次搜索都拉一遍所有 Notion 页面）
+  const posts = await getAllPosts();
 
   const query = q.toLowerCase();
   const results = q
@@ -33,7 +34,7 @@ export default function BlogSearchPage({
           搜索
         </h1>
         <p className="text-zinc-600 dark:text-zinc-400">
-          输入关键词，搜索文章标题、描述和正文内容。
+          输入关键词，搜索文章标题、描述和正文内容（Notion 文章只搜标题和描述）。
         </p>
       </header>
 

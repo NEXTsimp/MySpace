@@ -1,5 +1,8 @@
 import { getAllPosts } from "@/lib/posts";
 
+/** 每 5 分钟重新读取一次文章（含 Notion），新发布的文章无需重新部署 */
+export const revalidate = 300;
+
 function normalizeSiteUrl(raw: string | undefined): string {
   const s = (raw ?? "").trim();
   if (!s) return "";
@@ -26,7 +29,7 @@ function toRfc822Date(dateStr: string): string {
 }
 
 export async function GET() {
-  const posts = getAllPosts();
+  const posts = await getAllPosts();
   const lastBuildDate = new Date().toUTCString();
 
   const channelTitle = "My Space";

@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   description: "按年月归档浏览博客文章。",
 };
 
+/** 每 5 分钟重新读取一次文章（含 Notion），新发布的文章无需重新部署 */
+export const revalidate = 300;
+
 function formatYearMonth(dateStr: string): string {
   if (!dateStr) return "Unknown";
   const d = new Date(dateStr);
@@ -16,8 +19,8 @@ function formatYearMonth(dateStr: string): string {
   return `${y}-${m}`;
 }
 
-export default function BlogArchivePage() {
-  const posts = getAllPosts();
+export default async function BlogArchivePage() {
+  const posts = await getAllPosts();
 
   const groups = new Map<string, typeof posts>();
   for (const post of posts) {
