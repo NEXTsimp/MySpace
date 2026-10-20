@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   description: "记录玩过的游戏与一点随想。",
 };
 
+/** 每 5 分钟重新读取一次 Notion，新加的游戏记录无需重新部署 */
+export const revalidate = 300;
+
 function formatDate(iso: string): string {
   if (!iso) return "";
   const d = new Date(iso);

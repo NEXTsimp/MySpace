@@ -27,13 +27,14 @@ type NotionFileItem =
 
 /**
  * 从 Notion Files 属性中提取首张图片 URL。
- * 支持：外部链接 (external) 与 Notion 托管 (file，注意托管链接有时效约 1 小时)。
+ * 支持：外部链接 (external) 与 Notion 托管 (file)。托管链接约 1 小时失效，
+ * 所以改走 /api/notion-image，每次请求时再取最新链接。
  */
-function extractCoverUrl(files: NotionFileItem[] | undefined): string | null {
+function extractCoverUrl(files: NotionFileItem[] | undefined, pageId: string): string | null {
   const first = files?.[0];
   if (!first) return null;
   if (first.type === "external" && first.external?.url) return first.external.url;
-  if (first.type === "file" && first.file?.url) return first.file.url;
+  if (first.type === "file" && first.file?.url) return `/api/notion-image/${pageId}?prop=Cover`;
   return null;
 }
 
@@ -86,7 +87,7 @@ export async function getGames(): Promise<GameRecord[]> {
         ? (commentProp.rich_text ?? []).map((t) => t.plain_text).join("")
         : "";
     const cover =
-      coverProp?.type === "files" ? extractCoverUrl(coverProp.files) : null;
+      coverProp?.type === "files" ? extractCoverUrl(coverProp.files, page.id) : null;
     const date = dateProp?.type === "date" && dateProp.date?.start ? dateProp.date.start : "";
 
     return {
